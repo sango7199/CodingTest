@@ -9,39 +9,34 @@ import java.util.StringTokenizer;
 public class _0402_17298 {
     public static void main(String[] args) throws IOException {
         // 선언 및 입력
-        Stack<Integer> stk = new Stack<>();
-        StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine()," ");
         int[] A = new int[N];
-        int MAX = 0;
+        int[] NGE = new int[N];
+        Stack<Integer> stk = new Stack<>();
+
+        // 수열 A 입력과 출력할 NGE에 -1을 초기값 설정
+        StringTokenizer st = new StringTokenizer(br.readLine()," ");
         for (int i = 0; i < N; i++) {
             A[i] = Integer.parseInt(st.nextToken());
-            if (A[i] > MAX) MAX = A[i];
+            NGE[i] = -1;
         }
 
-        // NGE 계산
+        // NGE 입력
         for (int i = 0; i < N; i++) {
-            while (!stk.isEmpty() && stk.peek() < A[i]) {
+            while (!stk.isEmpty() && A[i] > A[stk.peek()]) {
+                NGE[stk.peek()] = A[i];
                 stk.pop();
-                sb.append(A[i] + " ");
             }
-
-            stk.push(A[i]);
-
-            if (!stk.isEmpty() && MAX == stk.peek()) { // MAX A값은 NGE가 없으므로 -1
-                stk.pop();
-                sb.append("-1 ");
-            }
-        }
-
-        while (!stk.isEmpty()) { // NGE(N)은 -1
-            stk.pop();
-            sb.append("-1 ");
+            stk.push(i);
         }
 
         // 출력
+        StringBuilder sb = new StringBuilder();
+        for (int nge: NGE
+             ) {
+            sb.append(nge + " ");
+        }
         System.out.print(sb.toString());
     }
 }
