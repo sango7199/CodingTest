@@ -3,25 +3,25 @@ package Que;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class _0422_28107 {
-    // 회전초밥 (입력 BR ver)
+    // 회전초밥 (HashMap ver)
     public static void main(String[] args) throws IOException {
         // 입력 및 선언
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken()); // 손님의 수
         int M = Integer.parseInt(st.nextToken()); // 초밥의 수
-        int[][] customers = new int[N][];
+        HashMap<Integer, ArrayList<Integer>> customers = new HashMap<>(); // K 손님, V 손님의 초밥 목록
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             int k = Integer.parseInt(st.nextToken());; // 손님의 주문목록 갯수
-            customers[i] = new int[k]; // 해당 손님의 주문 목록 배열을 크기 k로 초기화
+            // 해당 손님의 주문 목록 배열을 크기 k로 초기화
             for (int j = 0; j < k; j++) {
-                customers[i][j] = Integer.parseInt(st.nextToken());;
+                int A = Integer.parseInt(st.nextToken());
+                customers.putIfAbsent(A, new ArrayList<>());
+                // 여기까지 일단
             }
         }
         Queue<Integer> sushi = new LinkedList<>(); // 회전 초밥
