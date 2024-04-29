@@ -13,16 +13,19 @@ public class _0422_28107 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken()); // 손님의 수
         int M = Integer.parseInt(st.nextToken()); // 초밥의 수
+
+
         HashMap<Integer, ArrayList<Integer>> sushiPreferences = new HashMap<>(); // K 초밥 종류, V 손님 번호
+        HashMap<Integer, HashSet<Integer>> eatenSushi = new HashMap<>(); // K 손님 번호, V 먹은 초밥 종류
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            int k = Integer.parseInt(st.nextToken());; // 손님의 주문목록 갯수
-            // 해당 손님의 주문 목록 배열을 크기 k로 초기화
+            int k = Integer.parseInt(st.nextToken());; // 손님의 주문목록 개수
             for (int j = 0; j < k; j++) {
                 int A = Integer.parseInt(st.nextToken());
                 sushiPreferences.putIfAbsent(A, new ArrayList<>());
                 sushiPreferences.get(A).add(i);
             }
+            eatenSushi.put(i, new HashSet<>()); // 각 손님 별로 먹은 초밥
         }
 
         Queue<Integer> sushi = new LinkedList<>(); // 회전 초밥
@@ -30,24 +33,27 @@ public class _0422_28107 {
         for (int i = 0; i < M; i++) {
             sushi.add(Integer.parseInt(st.nextToken()));
         }
-        int[] sushiEaten = new int[N]; // 먹힌 초밥 (출력값)
+        int[] numberOfSushiEaten = new int[N]; // 각 손님이 먹은 초밥의 개수 배열 (출력값)
 
         // 먹힌 초밥 계산
         while(!sushi.isEmpty()) {
             int curSushi = sushi.poll(); // 현재 스시
-            if(sushiPreferences.containsKey(curSushi)) {
+            if (sushiPreferences.containsKey(curSushi)) {
                 for (int customer : sushiPreferences.get(curSushi)) {
-                    sushiEaten[customer]++;
-                    break;
+                    if(!eatenSushi.get(customer).contains(curSushi)) {
+                        numberOfSushiEaten[customer]++; // 손님이 먹은 초밥 개수 ++
+                        eatenSushi.get(customer).add(curSushi); // 손님이 해당 초밥을 먹음
+                        break; // 첫 번째 먹을 수 있는 손님에게 주고 종료
+                    }
                 }
             }
         }
 
         // 출력
         StringBuilder sb = new StringBuilder();
-        for (int count : sushiEaten) {
+        for (int count : numberOfSushiEaten) {
             sb.append(count).append(" ");
         }
-        System.out.print(sb.toString());
+        System.out.print(sb.toString().trim());
     }
 }
