@@ -17,32 +17,29 @@ public class _0528_19644 {
         for (int i = 0; i < L; i++) { // 좀비 체력 입력
             zombies[i] = sc.nextInt();
         }
-        Deque<Integer> deque = new LinkedList<>(); // 현재 좀비의 체력을 저장하는 덱
         sc.close();
 
+        Deque<Integer> deque = new LinkedList<>(); // 현재 좀비의 체력을 저장하는 덱
+        int damage = 0; // 누적 상살력
         String survivalStatus = "YES"; // 생존여부
+
         for (int i = 0; i < L; i++) {
             deque.addLast(zombies[i]); // 현재 좀비를 덱에 추가
 
-            if (deque.size() > ML) deque.removeFirst(); // 사정거리 밖으로 나간 좀비 덱에서 제거
+            if (deque.size() > ML) { // 사정거리 밖으로 나간 좀비 덱에서 제거
+                deque.removeFirst();
+            }
 
-            if (deque.peekFirst() > MK && C > 0) { // 1M에 위치한 좀비의 체력이 살상력보다 높을 경우 (지뢰)
+            if (deque.peekFirst() > Math.max((i+1) * MK, damage) && C > 0) { // 1M에 위치한 좀비의 체력이 살상력보다 높을 경우 (지뢰)
                 C--; // 지뢰 사용
                 deque.removeFirst();
             } else { // 1M에 위치한 좀비의 체력이 살상력보다 낮을 경우 (사격)
-                for (int j = 0; j < deque.size(); j++) { // 사정거리에 있는 좀비들의 체력 MK만큼 체력 감소
-                    int curZombieHP = deque.removeFirst();
-                    curZombieHP -= MK;
-                    deque.addLast(curZombieHP);
-                }
-
-                if (deque.peekFirst() > 0) { // 사격 후 1M에 위치한 좀비가 살아있다면 fail
+                if (i < ML) damage += MK;
+                if (deque.peekFirst() - damage > 0) { // 사격 후 1M에 위치한 좀비가 살아있다면 fail
                     survivalStatus = "NO";
                     break;
                 }
             }
-
-
         }
         // 출력
         System.out.print(survivalStatus);
