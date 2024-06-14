@@ -12,25 +12,42 @@ public class _0614_1021 {
         int N = sc.nextInt();
         int M = sc.nextInt();
 
-        int size = N; // 현재 큐의 크기
-        int Rsize = size; // 해당 수의 위치를 추적할 오른쪽 변수
-        int cnt = 0; // 출력 : 연산의 최솟값
-        for (int i = 1; i <= M; i++) {
-            int element = sc.nextInt(); // 현재 원소
-            int R = (Rsize - element) + 1;
-            int L = size - R;
-            if (L < R) { // 좌측이 더 작다면 좌측이 우측으로 이동하므로 Rsize +
-                cnt += L;
-                Rsize += L;
-            } else { // 우측이 더 작다면 우측이 좌측으로 이동하므로 Rsize -
-                cnt += R;
-                Rsize -= R;
-            }
-            size--;
+        Deque<Integer> deque = new LinkedList<>();
+        for (int i = 1; i <= N; i++) {
+            deque.add(i);
         }
-        sc.close();
+
+        int cnt = 0;
+        for (int i = 0; i < M; i++) {
+            int target = sc.nextInt();
+            int index = 0; // 원소의 인덱스 위치
+            for (Integer value : deque) { // 원소의 인덱스 위치 찾기
+                if (value == target) {
+                    break;
+                }
+                index++;
+            }
+
+            int left = index;
+            int right = deque.size() - index;
+
+            if (left <= right) { // 좌측이 작다면
+                for (int j = 0; j < left; j++) {
+                    deque.addLast(deque.removeFirst());
+                    cnt++;
+                }
+            } else { // 우측이 작다면
+                for (int j = 0; j < right; j++) {
+                    deque.addFirst(deque.removeLast());
+                    cnt++;
+                }
+            }
+            deque.removeFirst();
+
+        }
 
         // 출력
         System.out.print(cnt);
+        sc.close();
     }
 }
